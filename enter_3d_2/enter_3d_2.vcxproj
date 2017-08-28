@@ -40,8 +40,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>D:\glAllLibraries\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\glAllLibraries\libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\Enter_3D_gitrepo\opengl_learning\libs\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Enter_3D_gitrepo\opengl_learning\libs\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
