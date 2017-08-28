@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Enter_3D", "Enter_3D\Enter_3D.vcxproj", "{6126BC25-73CD-4C59-8824-A121BF4E8D6D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "enter_3d_2", "enter_3d_2\enter_3d_2.vcxproj", "{F93CB3C0-ED7D-4DE5-AFAB-49AE1E9C07BE}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "enter_3d_camera", "enter_3d_camera\enter_3d_camera.vcxproj", "{6919A471-5E8A-4AAB-AA78-ABE3427CD464}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lighting_1", "lighting_1\lighting_1.vcxproj", "{EE2CE312-2C72-4A2A-AD92-96F5B62E6921}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6126BC25-73CD-4C59-8824-A121BF4E8D6D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6126BC25-73CD-4C59-8824-A121BF4E8D6D}.Debug|Win32.Build.0 = Debug|Win32
+		{6126BC25-73CD-4C59-8824-A121BF4E8D6D}.Release|Win32.ActiveCfg = Release|Win32
+		{6126BC25-73CD-4C59-8824-A121BF4E8D6D}.Release|Win32.Build.0 = Release|Win32
+		{F93CB3C0-ED7D-4DE5-AFAB-49AE1E9C07BE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F93CB3C0-ED7D-4DE5-AFAB-49AE1E9C07BE}.Debug|Win32.Build.0 = Debug|Win32
+		{F93CB3C0-ED7D-4DE5-AFAB-49AE1E9C07BE}.Release|Win32.ActiveCfg = Release|Win32
+		{F93CB3C0-ED7D-4DE5-AFAB-49AE1E9C07BE}.Release|Win32.Build.0 = Release|Win32
+		{6919A471-5E8A-4AAB-AA78-ABE3427CD464}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6919A471-5E8A-4AAB-AA78-ABE3427CD464}.Debug|Win32.Build.0 = Debug|Win32
+		{6919A471-5E8A-4AAB-AA78-ABE3427CD464}.Release|Win32.ActiveCfg = Release|Win32
+		{6919A471-5E8A-4AAB-AA78-ABE3427CD464}.Release|Win32.Build.0 = Release|Win32
+		{EE2CE312-2C72-4A2A-AD92-96F5B62E6921}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EE2CE312-2C72-4A2A-AD92-96F5B62E6921}.Debug|Win32.Build.0 = Debug|Win32
+		{EE2CE312-2C72-4A2A-AD92-96F5B62E6921}.Release|Win32.ActiveCfg = Release|Win32
+		{EE2CE312-2C72-4A2A-AD92-96F5B62E6921}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
