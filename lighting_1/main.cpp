@@ -188,6 +188,9 @@ int main(int argc, char** argv)
 		GLint lightPosLoc = glGetUniformLocation(shader.programId, "lightPos");
 		glUniform3f(lightPosLoc, lightPos.x, lightPos.y, lightPos.z);
 
+		GLint viewPosLoc = glGetUniformLocation(shader.programId, "viewPos");
+		glUniform3f(viewPosLoc, camera.Position.x, camera.Position.y, camera.Position.z);
+
 		GLint objectColorLoc = glGetUniformLocation(shader.programId, "objectColor");
 		GLint lightColorLoc = glGetUniformLocation(shader.programId, "lightColor");
 		glUniform3f(objectColorLoc, 1.0f, 0.5f, 0.31f);// 珊瑚红
