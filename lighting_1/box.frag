@@ -13,15 +13,11 @@ void main()
 	vec3 norm = normalize(Normal);
 	vec3 lightDir = normalize(lightPos - FragPos);
 	float diff = max(dot(norm,lightDir),0.0);
-    vec3 deffuse = diff * lightColor;
+    vec3 diffuse = diff * lightColor;
 
-	float ambientStrength = 0.5f;//环境光照因子
-	vec3 ambient = ambientStrength * lightColor;//环境光的颜色
+	float ambientStrength = 0.1f;//鐜鍏夌収鍥犲瓙
+	vec3 ambient = ambientStrength * lightColor;//鐜鍏夌殑棰滆壊
 
-    //color = vec4((ambient + deffuse) * objectColor,1.0f);
-	if(diff == 0.0){
-	  color = vec4(0.0,1.0,0.0,1.0);
-	}else{
-	  color = vec4(diff * lightColor,1.0f);
-	}
+	vec3 result = (ambient + diffuse) * objectColor;
+    color = vec4(result,1.0f);
 }
