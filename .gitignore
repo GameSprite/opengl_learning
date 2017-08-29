@@ -1,0 +1,9 @@
+*.vcxproj
+*.vcxproj.filters
+*.obj
+*.idb
+*.pdb
+*.tlog
+*.exe
+*.ilk
+
