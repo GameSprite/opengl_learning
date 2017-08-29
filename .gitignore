@@ -1,0 +1,13 @@
+*.vcxproj
+*.vcxproj.filters
+*.obj
+*.idb
+*.pdb
+*.tlog
+*.exe
+*.ilk
+
+*.sdf
+*.log
+*.suo
+*.opensdf

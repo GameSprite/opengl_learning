@@ -1,63 +1,63 @@
-// ÒıÈëGLEW¿â ¶¨Òå¾²Ì¬Á´½Ó
+// å¼•å…¥GLEWåº“ å®šä¹‰é™æ€é“¾æ¥
 #define GLEW_STATIC
 #include <Windows.h>
 #include <debugapi.h>
 #include <stdio.h>
 #include <GLEW/glew.h>
-// ÒıÈëGLFW¿â
+// å¼•å…¥GLFWåº“
 #include <GLFW/glfw3.h>
 #include <SOIL\SOIL.h>
-#include <glm\glm.hpp> //ÒıÈëopengl ÊıÑ§¿â
+#include <glm\glm.hpp> //å¼•å…¥opengl æ•°å­¦åº“
 #include <glm\gtc\matrix_transform.hpp>
 #include <glm\gtc\type_ptr.hpp>
 #include <iostream>
 #include <vector>
 
-// °üº¬×ÅÉ«Æ÷¼ÓÔØ¿â
+// åŒ…å«ç€è‰²å™¨åŠ è½½åº“
 #include "shader.h"
 #include "Camera.h"
 
-// ¼üÅÌ»Øµ÷º¯ÊıÉùÃ÷
+// é”®ç›˜å›è°ƒå‡½æ•°å£°æ˜
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-//Êó±êÒÆ¶¯»Øµ÷º¯ÊıÉùÃ÷
+//é¼ æ ‡ç§»åŠ¨å›è°ƒå‡½æ•°å£°æ˜
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-//Êó±ê¹öÂÖ¹ö¶¯
+//é¼ æ ‡æ»šè½®æ»šåŠ¨
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 void mouse_outIncallback(GLFWwindow* window, int flag);
-//×ÛºÏ´¦Àí¼üÅÌ°´¼ü£¬½â¾ö¿¨¶Ù
+//ç»¼åˆå¤„ç†é”®ç›˜æŒ‰é”®ï¼Œè§£å†³å¡é¡¿
 void Do_Movement();
 
-// ¶¨Òå³ÌĞò³£Á¿
+// å®šä¹‰ç¨‹åºå¸¸é‡
 const int WINDOW_WIDTH = 800, WINDOW_HEIGHT = 600;
 float mixvalue = 0.5;
 bool keys[1024] = { false };
-Camera camera(glm::vec3(0.0f, 0.0f, 4.0f));
-//ÏÂÃæ2¸ö±äÁ¿ÓÃÓÚ¼ÆËãÖ¡¼ä¸ô
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+//ä¸‹é¢2ä¸ªå˜é‡ç”¨äºè®¡ç®—å¸§é—´éš”
 GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
 bool mouseFirst = true;
 double lastx, lasty;
 
-//µÆµÄÎ»ÖÃ
-glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+//ç¯çš„ä½ç½®
+glm::vec3 lightPos(1.2f, 1.0f, 1.0f);
 int main(int argc, char** argv)
 {
 	/***********************************************************************************/
-	if (!glfwInit())	// ³õÊ¼»¯glfw¿â
+	if (!glfwInit())	// åˆå§‹åŒ–glfwåº“
 	{
 		std::cout << "Error::GLFW could not initialize GLFW!" << std::endl;
 		return -1;
 	}
 
-	// ¿ªÆôOpenGL 3.3 core profile
+	// å¼€å¯OpenGL 3.3 core profile
 	std::cout << "Start OpenGL core profile version 3.3" << std::endl;
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-	// ´´½¨´°¿Ú
+	// åˆ›å»ºçª—å£
 	GLFWwindow* window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT,
 		"Lighting", NULL, NULL);
 	if (!window)
@@ -66,19 +66,19 @@ int main(int argc, char** argv)
 		glfwTerminate();
 		return -1;
 	}
-	// ´´½¨µÄ´°¿ÚµÄcontextÖ¸¶¨Îªµ±Ç°context
+	// åˆ›å»ºçš„çª—å£çš„contextæŒ‡å®šä¸ºå½“å‰context
 	glfwMakeContextCurrent(window);
 
-	// ×¢²á´°¿Ú¼üÅÌÊÂ¼ş»Øµ÷º¯Êı
+	// æ³¨å†Œçª—å£é”®ç›˜äº‹ä»¶å›è°ƒå‡½æ•°
 	glfwSetKeyCallback(window, key_callback);
 	glfwSetCursorEnterCallback(window, mouse_outIncallback);
-	//´°¿ÚÊó±êÊÂ¼ş»Øµ÷
+	//çª—å£é¼ æ ‡äº‹ä»¶å›è°ƒ
 	glfwSetCursorPosCallback(window, mouse_callback);
 
 	glfwSetScrollCallback(window, scroll_callback);
 
-	// ³õÊ¼»¯GLEW »ñÈ¡OpenGLº¯Êı
-	glewExperimental = GL_TRUE; // ÈÃglew»ñÈ¡ËùÓĞÍØÕ¹º¯Êı
+	// åˆå§‹åŒ–GLEW è·å–OpenGLå‡½æ•°
+	glewExperimental = GL_TRUE; // è®©glewè·å–æ‰€æœ‰æ‹“å±•å‡½æ•°
 	GLenum status = glewInit();
 	if (status != GLEW_OK)
 	{
@@ -88,10 +88,10 @@ int main(int argc, char** argv)
 		return -1;
 	}
 
-	// ÉèÖÃÊÓ¿Ú²ÎÊı
+	// è®¾ç½®è§†å£å‚æ•°
 	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-	// Ö¸¶¨¶¥µãÊôĞÔÊı¾İ ¶¥µãÎ»ÖÃ
+	// æŒ‡å®šé¡¶ç‚¹å±æ€§æ•°æ® é¡¶ç‚¹ä½ç½®
 	GLfloat vertices[] =
 	{
 		-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
@@ -136,7 +136,7 @@ int main(int argc, char** argv)
 		-0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f,
 		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f
 	};
-	// ´´½¨»º´æ¶ÔÏó
+	// åˆ›å»ºç¼“å­˜å¯¹è±¡
 	GLuint VAOId, VBOId;
 	glGenVertexArrays(1, &VAOId);
 	glGenBuffers(1, &VBOId);
@@ -146,7 +146,7 @@ int main(int argc, char** argv)
 
 	glBindVertexArray(VAOId);
 
-	// Ö¸¶¨½âÎö·½Ê½  ²¢ÆôÓÃ¶¥µãÊôĞÔ
+	// æŒ‡å®šè§£ææ–¹å¼  å¹¶å¯ç”¨é¡¶ç‚¹å±æ€§
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GL_FLOAT), (GLvoid*)0); //
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GL_FLOAT),(GLvoid*)(3*sizeof(GLfloat)));
 	glEnableVertexAttribArray(0);
@@ -163,33 +163,38 @@ int main(int argc, char** argv)
 	glEnableVertexAttribArray(0);
 	glBindVertexArray(0);
 
-	// Section2 ×¼±¸×ÅÉ«Æ÷³ÌĞò
+	// Section2 å‡†å¤‡ç€è‰²å™¨ç¨‹åº
 	Shader shader("box.vertex", "box.frag");
 	Shader lampshader("light.vertex", "light.frag");
 
-	GLint lightPosLoc = glGetUniformLocation(shader.programId, "lightPos");
-	glUniform3f(lightPosLoc, lightPos.x, lightPos.y, lightPos.z);
-	// ¿ªÊ¼ÓÎÏ·Ö÷Ñ­»·
+	glEnable(GL_DEPTH_TEST);
+	// å¼€å§‹æ¸¸æˆä¸»å¾ªç¯
 	while (!glfwWindowShouldClose(window))
 	{
 		GLfloat curFrameTime = (GLfloat)glfwGetTime();
 		deltaTime = curFrameTime - lastFrame;
 		lastFrame = curFrameTime;
 
-		glfwPollEvents(); // ´¦ÀíÀıÈçÊó±ê ¼üÅÌµÈÊÂ¼ş
+		glfwPollEvents(); // å¤„ç†ä¾‹å¦‚é¼ æ ‡ é”®ç›˜ç­‰äº‹ä»¶
 		Do_Movement();
 
-		// Çå³ıÑÕÉ«»º³åÇø ÖØÖÃÎªÖ¸¶¨ÑÕÉ«
+		// æ¸…é™¤é¢œè‰²ç¼“å†²åŒº é‡ç½®ä¸ºæŒ‡å®šé¢œè‰²
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// ÕâÀïÌîĞ´³¡¾°»æÖÆ´úÂë
+		// è¿™é‡Œå¡«å†™åœºæ™¯ç»˜åˆ¶ä»£ç 
 		shader.use();
+
+		GLint lightPosLoc = glGetUniformLocation(shader.programId, "lightPos");
+		glUniform3f(lightPosLoc, lightPos.x, lightPos.y, lightPos.z);
+
+		GLint viewPosLoc = glGetUniformLocation(shader.programId, "viewPos");
+		glUniform3f(viewPosLoc, camera.Position.x, camera.Position.y, camera.Position.z);
 
 		GLint objectColorLoc = glGetUniformLocation(shader.programId, "objectColor");
 		GLint lightColorLoc = glGetUniformLocation(shader.programId, "lightColor");
-		glUniform3f(objectColorLoc, 1.0f, 0.5f, 0.31f);// Éºº÷ºì
-		glUniform3f(lightColorLoc, 1.0f, 1.0f, 1.0f); //°Ñ¹âÔ´ÉèÖÃÎª°×É«
+		glUniform3f(objectColorLoc, 1.0f, 0.5f, 0.31f);// çŠç‘šçº¢
+		glUniform3f(lightColorLoc, 1.0f, 1.0f, 1.0f); //æŠŠå…‰æºè®¾ç½®ä¸ºç™½è‰²
 
 		GLint modelLoc = glGetUniformLocation(shader.programId, "model");
 		GLint viewLoc = glGetUniformLocation(shader.programId, "view");
@@ -227,9 +232,9 @@ int main(int argc, char** argv)
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
 
-		glfwSwapBuffers(window); // ½»»»»º´æ
+		glfwSwapBuffers(window); // äº¤æ¢ç¼“å­˜
 	}
-	// ÊÍ·Å×ÊÔ´
+	// é‡Šæ”¾èµ„æº
 	glDeleteVertexArrays(1, &VAOId);
 	glDeleteVertexArrays(1, &lightVAO);
 
@@ -274,7 +279,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 	camera.ProcessMouseScroll(yoffset);
 
 }
-//×ÛºÏ´¦Àí¼üÅÌ°´¼ü£¬½â¾ö¿¨¶Ù
+//ç»¼åˆå¤„ç†é”®ç›˜æŒ‰é”®ï¼Œè§£å†³å¡é¡¿
 void Do_Movement()
 {
 	if (keys[GLFW_KEY_W])
