@@ -164,7 +164,7 @@ int main(int argc, char** argv)
 	glBindVertexArray(0);
 
 	// Section2 准备着色器程序
-	Shader shader("box.vertex", "box.frag");
+	Shader shader("box.vertex", "box2.frag");
 	Shader lampshader("light.vertex", "light.frag");
 
 	glEnable(GL_DEPTH_TEST);
@@ -191,9 +191,22 @@ int main(int argc, char** argv)
 		GLint viewPosLoc = glGetUniformLocation(shader.programId, "viewPos");
 		glUniform3f(viewPosLoc, camera.Position.x, camera.Position.y, camera.Position.z);
 
-		GLint objectColorLoc = glGetUniformLocation(shader.programId, "objectColor");
+		//GLint objectColorLoc = glGetUniformLocation(shader.programId, "objectColor");
+		//glUniform3f(objectColorLoc, 1.0f, 0.5f, 0.31f);// 珊瑚红
+
+		GLint matAmbientLoc = glGetUniformLocation(shader.programId, "material.ambient");
+		glUniform3f(matAmbientLoc, 1.0f, 0.5f, 0.31f);
+
+		GLint matDiffuseLoc = glGetUniformLocation(shader.programId, "material.diffuse");
+		glUniform3f(matDiffuseLoc, 1.0f, 0.5f, 0.31f);
+
+		GLint matSpecularLoc = glGetUniformLocation(shader.programId, "material.specular");
+		glUniform3f(matSpecularLoc, 0.5f, 0.5f, 0.5f);
+
+		GLint matShininessLoc = glGetUniformLocation(shader.programId, "material.shininess");
+		glUniform1f(matShininessLoc, 32.0);
+
 		GLint lightColorLoc = glGetUniformLocation(shader.programId, "lightColor");
-		glUniform3f(objectColorLoc, 1.0f, 0.5f, 0.31f);// 珊瑚红
 		glUniform3f(lightColorLoc, 1.0f, 1.0f, 1.0f); //把光源设置为白色
 
 		GLint modelLoc = glGetUniformLocation(shader.programId, "model");
