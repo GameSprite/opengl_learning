@@ -40,7 +40,7 @@ bool mouseFirst = true;
 double lastx, lasty;
 
 //灯的位置
-glm::vec3 lightPos(1.2f, 1.0f, 1.0f);
+glm::vec3 lightPos(1.5f, 0.5, -0.5f);
 int main(int argc, char** argv)
 {
 	/***********************************************************************************/
@@ -200,14 +200,24 @@ int main(int argc, char** argv)
 		GLint matDiffuseLoc = glGetUniformLocation(shader.programId, "material.diffuse");
 		glUniform3f(matDiffuseLoc, 1.0f, 0.5f, 0.31f);
 
-		GLint matSpecularLoc = glGetUniformLocation(shader.programId, "material.specular");
+		GLint matSpecularLoc = glGetUniformLocation(shader.programId, "material.specular");//镜面因子
 		glUniform3f(matSpecularLoc, 0.5f, 0.5f, 0.5f);
 
-		GLint matShininessLoc = glGetUniformLocation(shader.programId, "material.shininess");
+		GLint matShininessLoc = glGetUniformLocation(shader.programId, "material.shininess");//设置高光值
 		glUniform1f(matShininessLoc, 32.0);
 
 		GLint lightColorLoc = glGetUniformLocation(shader.programId, "lightColor");
 		glUniform3f(lightColorLoc, 1.0f, 1.0f, 1.0f); //把光源设置为白色
+
+		GLint lightAmbientLoc = glGetUniformLocation(shader.programId, "light.ambient");
+		glUniform3f(lightAmbientLoc, 0.2f, 0.2f, 0.2f);
+
+		GLint lightDiffuseLoc = glGetUniformLocation(shader.programId, "light.diffuse");
+		glUniform3f(lightDiffuseLoc, 0.5f, 0.5f, 0.5f);// 让我们把这个光调暗一点，这样会看起来更自然
+
+		GLint lightSpecularLoc = glGetUniformLocation(shader.programId, "light.specular");
+		glUniform3f(lightSpecularLoc, 1.0f, 1.0f, 1.0f);
+		
 
 		GLint modelLoc = glGetUniformLocation(shader.programId, "model");
 		GLint viewLoc = glGetUniformLocation(shader.programId, "view");

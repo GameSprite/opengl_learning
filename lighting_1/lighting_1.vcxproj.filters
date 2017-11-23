@@ -27,6 +27,7 @@
     <None Include="box.frag" />
     <None Include="light.frag" />
     <None Include="light.vertex" />
+    <None Include="box2.frag" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
