@@ -29,7 +29,7 @@ void mouse_outIncallback(GLFWwindow* window, int flag);
 void Do_Movement();
 
 // 定义程序常量
-const int WINDOW_WIDTH = 800, WINDOW_HEIGHT = 600;
+const float WINDOW_WIDTH = 800, WINDOW_HEIGHT = 600;
 float mixvalue = 0.5;
 bool keys[1024] = { false };
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -40,7 +40,7 @@ bool mouseFirst = true;
 double lastx, lasty;
 
 //灯的位置
-glm::vec3 lightPos(1.5f, 0.5, -0.5f);
+glm::vec3 lightPos(1.5f, 1.0f, -0.5f);
 int main(int argc, char** argv)
 {
 	/***********************************************************************************/
