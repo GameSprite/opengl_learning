@@ -24,7 +24,7 @@ uniform Material material;
 uniform Light light;
 
 out vec4 color;
-int main()
+void main()
 {
 	//环境光
 	vec3 ambient = light.ambient * material.ambient;
