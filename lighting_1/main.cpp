@@ -40,7 +40,7 @@ bool mouseFirst = true;
 double lastx, lasty;
 
 //灯的位置
-glm::vec3 lightPos(1.5f, 1.0f, -0.5f);
+glm::vec3 lightPos(1.5f, 0.7f, -0.5f);
 int main(int argc, char** argv)
 {
 	/***********************************************************************************/
@@ -166,12 +166,25 @@ int main(int argc, char** argv)
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	//加载贴图
+
+	//加载漫反射贴图
 	int width, height;
 	unsigned char* diffImage = SOIL_load_image("diffuseTexture.png", &width, &height, NULL, SOIL_LOAD_RGB);
 	glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,width,height,0,GL_RGB,GL_UNSIGNED_BYTE,diffImage);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	SOIL_free_image_data(diffImage);
+	glBindTexture(GL_TEXTURE_2D, 0);// Unbind texture when done, so we won't accidentily mess up our texture.
+
+	//箱子的镜面反射贴图
+	GLuint specularTexture;
+	glGenTextures(1, &specularTexture);
+	glBindTexture(GL_TEXTURE_2D, specularTexture);
+
+	//加载镜面反射贴图
+	unsigned char* specularImage = SOIL_load_image("specularTexture.png", &width, &height, NULL, SOIL_LOAD_RGB);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, specularImage);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	SOIL_free_image_data(specularImage);
 	glBindTexture(GL_TEXTURE_2D, 0);// Unbind texture when done, so we won't accidentily mess up our texture.
 
 	GLuint lightVAO;
@@ -225,7 +238,11 @@ int main(int argc, char** argv)
 		glBindTexture(GL_TEXTURE_2D, diffuseTexture);
 
 		GLint matSpecularLoc = glGetUniformLocation(shader.programId, "material.specular");//镜面因子
-		glUniform3f(matSpecularLoc, 0.5f, 0.5f, 0.5f);
+		//glUniform3f(matSpecularLoc, 0.5f, 0.5f, 0.5f);
+		glUniform1i(matSpecularLoc, 1);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, specularTexture);
+
 
 		GLint matShininessLoc = glGetUniformLocation(shader.programId, "material.shininess");//设置高光值
 		glUniform1f(matShininessLoc, 32.0);
