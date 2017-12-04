@@ -244,10 +244,6 @@ int main(int argc, char** argv)
 
 		// 这里填写场景绘制代码
 		shader.use();
-
-		GLint lightPosLoc = glGetUniformLocation(shader.programId, "lightPos");
-		glUniform3f(lightPosLoc, lightPos.x, lightPos.y, lightPos.z);
-
 		GLint viewPosLoc = glGetUniformLocation(shader.programId, "viewPos");
 		glUniform3f(viewPosLoc, camera.Position.x, camera.Position.y, camera.Position.z);
 
@@ -280,6 +276,9 @@ int main(int argc, char** argv)
 		GLint lightColorLoc = glGetUniformLocation(shader.programId, "lightColor");
 		glUniform3f(lightColorLoc, 1.0f, 1.0f, 1.0f); //把光源设置为白色(不再使用，使用Light代替)
 
+		GLint lightPosLoc = glGetUniformLocation(shader.programId, "light.position");
+		glUniform3f(lightPosLoc, lightPos.x, lightPos.y, lightPos.z);
+
 		GLint lightAmbientLoc = glGetUniformLocation(shader.programId, "light.ambient");
 		glUniform3f(lightAmbientLoc, 0.2f, 0.2f, 0.2f);
 
@@ -291,6 +290,11 @@ int main(int argc, char** argv)
 		
 		GLint lightDirectionLoc = glGetUniformLocation(shader.programId, "light.direction");
 		glUniform3f(lightDirectionLoc, -0.2f, -1.0f, -0.3f);
+
+		//衰减
+		glUniform1f(glGetUniformLocation(shader.programId,"light.constant"), 1.0f);
+		glUniform1f(glGetUniformLocation(shader.programId, "light.linear"), 0.09f);
+		glUniform1f(glGetUniformLocation(shader.programId,"light.quadratic"),0.032f);
 
 		GLint modelLoc = glGetUniformLocation(shader.programId, "model");
 		GLint viewLoc = glGetUniformLocation(shader.programId, "view");
