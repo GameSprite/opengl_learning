@@ -187,6 +187,18 @@ int main(int argc, char** argv)
 	SOIL_free_image_data(specularImage);
 	glBindTexture(GL_TEXTURE_2D, 0);// Unbind texture when done, so we won't accidentily mess up our texture.
 
+	//箱子的放射光贴图(自发光)
+	GLuint emissionTexture;
+	glGenTextures(1, &emissionTexture);
+	glBindTexture(GL_TEXTURE_2D, emissionTexture);
+
+	//加载放射光贴图
+	unsigned char* emissionImage = SOIL_load_image("irradiation.jpg", &width, &height, NULL, SOIL_LOAD_RGB);
+	glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,width,height,0,GL_RGB,GL_UNSIGNED_BYTE,emissionImage);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	SOIL_free_image_data(emissionImage);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
 	GLuint lightVAO;
 	glGenVertexArrays(1, &lightVAO);
 	glBindVertexArray(lightVAO);
@@ -243,12 +255,16 @@ int main(int argc, char** argv)
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, specularTexture);
 
+		GLint matEmissionLoc = glGetUniformLocation(shader.programId, "material.emission");//放射光贴图
+		glUniform1i(matEmissionLoc,2);
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D,emissionTexture);
 
 		GLint matShininessLoc = glGetUniformLocation(shader.programId, "material.shininess");//设置高光值
 		glUniform1f(matShininessLoc, 32.0);
 
 		GLint lightColorLoc = glGetUniformLocation(shader.programId, "lightColor");
-		glUniform3f(lightColorLoc, 1.0f, 1.0f, 1.0f); //把光源设置为白色
+		glUniform3f(lightColorLoc, 1.0f, 1.0f, 1.0f); //把光源设置为白色(不再使用，使用Light代替)
 
 		GLint lightAmbientLoc = glGetUniformLocation(shader.programId, "light.ambient");
 		glUniform3f(lightAmbientLoc, 0.2f, 0.2f, 0.2f);

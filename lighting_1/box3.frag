@@ -4,6 +4,7 @@ struct Material
 	vec3  ambient;
 	sampler2D diffuse;
 	sampler2D specular;
+	sampler2D emission;
 	float shininess;//高光值
 };
 struct Light
@@ -17,7 +18,7 @@ in vec3 Normal;
 in vec3 FragPos;
 in vec2 TexCoords;
 
-uniform vec3 lightColor;
+uniform vec3 lightColor; //不再使用，使用Light代替单一的光源颜色
 uniform vec3 lightPos;
 uniform vec3 viewPos;//观察者的位置坐标
 uniform Material material;
@@ -38,6 +39,7 @@ void main()
 	vec3 reflectDir = reflect(-lightDir,norm);
 	float spec = pow(max(dot(reflectDir,viewDir),0.0),material.shininess);
 	vec3 specular = light.specular * (spec * vec3(texture(material.specular,TexCoords)));
-
-	color = vec4(ambient + diffuse + specular,1.0);
+	//放射光
+	vec3 emission = vec3(texture(material.emission,TexCoords));
+	color = vec4(ambient + diffuse + specular + emission * 0.4,1.0);
 }
