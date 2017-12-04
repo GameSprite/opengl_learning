@@ -137,6 +137,20 @@ int main(int argc, char** argv)
 		-0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
 		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f
 	};
+
+	// 指定10个箱子的位置
+	glm::vec3 cubePositions[] = {
+		glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3(2.0f, 5.0f, -15.0f),
+		glm::vec3(-1.5f, -2.2f, -2.5f),
+		glm::vec3(-3.8f, -2.0f, -12.3f),
+		glm::vec3(2.4f, -0.4f, -3.5f),
+		glm::vec3(-1.7f, 3.0f, -7.5f),
+		glm::vec3(1.3f, -2.0f, -2.5f),
+		glm::vec3(1.5f, 2.0f, -2.5f),
+		glm::vec3(1.5f, 0.2f, -1.5f),
+		glm::vec3(-1.3f, 1.0f, -1.5f)
+	};
 	// 创建缓存对象
 	GLuint VAOId, VBOId;
 	glGenVertexArrays(1, &VAOId);
@@ -255,10 +269,10 @@ int main(int argc, char** argv)
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, specularTexture);
 
-		GLint matEmissionLoc = glGetUniformLocation(shader.programId, "material.emission");//放射光贴图
-		glUniform1i(matEmissionLoc,2);
-		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D,emissionTexture);
+		//GLint matEmissionLoc = glGetUniformLocation(shader.programId, "material.emission");//放射光贴图
+		//glUniform1i(matEmissionLoc,2);
+		//glActiveTexture(GL_TEXTURE2);
+		//glBindTexture(GL_TEXTURE_2D,emissionTexture);
 
 		GLint matShininessLoc = glGetUniformLocation(shader.programId, "material.shininess");//设置高光值
 		glUniform1f(matShininessLoc, 32.0);
@@ -275,6 +289,8 @@ int main(int argc, char** argv)
 		GLint lightSpecularLoc = glGetUniformLocation(shader.programId, "light.specular");
 		glUniform3f(lightSpecularLoc, 1.0f, 1.0f, 1.0f);
 		
+		GLint lightDirectionLoc = glGetUniformLocation(shader.programId, "light.direction");
+		glUniform3f(lightDirectionLoc, -0.2f, -1.0f, -0.3f);
 
 		GLint modelLoc = glGetUniformLocation(shader.programId, "model");
 		GLint viewLoc = glGetUniformLocation(shader.programId, "view");
@@ -289,28 +305,39 @@ int main(int argc, char** argv)
 		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
 		//draw the container
-		glBindVertexArray(VAOId);
+		/*glBindVertexArray(VAOId);
 		glm::mat4 model;
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glBindVertexArray(0);
+		glBindVertexArray(0);*/
 
+		//draw 10 containers
+		glBindVertexArray(VAOId);
+		glm::mat4 model;
+		for (GLuint i = 0; i < 10; i++){
+			model = glm::mat4();
+			model = glm::translate(model, cubePositions[i]);
+			GLfloat angle = 20.0f * i;
+			model = glm::rotate(model, angle, glm::vec3(1.0f, 0.3f, 0.5f));
+			glUniformMatrix4fv(modelLoc,1,GL_FALSE,glm::value_ptr(model));
+			glDrawArrays(GL_TRIANGLES,0,36);
+		}
 		//draw the lamp,again build the appropriate shader
-		lampshader.use();
-		modelLoc = glGetUniformLocation(lampshader.programId,"model");
-		viewLoc = glGetUniformLocation(lampshader.programId,"view");
-		projectionLoc = glGetUniformLocation(lampshader.programId,"projection");
-		//set matrices
-		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
-		model = glm::mat4();
-		model = glm::translate(model, lightPos);
-		model = glm::scale(model, glm::vec3(0.2f));//make it a smaller cube
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//lampshader.use();
+		//modelLoc = glGetUniformLocation(lampshader.programId,"model");
+		//viewLoc = glGetUniformLocation(lampshader.programId,"view");
+		//projectionLoc = glGetUniformLocation(lampshader.programId,"projection");
+		////set matrices
+		//glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+		//glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+		//model = glm::mat4();
+		//model = glm::translate(model, lightPos);
+		//model = glm::scale(model, glm::vec3(0.2f));//make it a smaller cube
+		//glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
-		glBindVertexArray(lightVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glBindVertexArray(0);
+		//glBindVertexArray(lightVAO);
+		//glDrawArrays(GL_TRIANGLES, 0, 36);
+		//glBindVertexArray(0);
 
 		glfwSwapBuffers(window); // 交换缓存
 	}

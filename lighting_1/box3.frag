@@ -9,7 +9,8 @@ struct Material
 };
 struct Light
 {
-	vec3 position;
+	//vec3 position; //平行光不需要光源位置了，因为是无限远的,只需要一个方向向量就行
+	vec3 direction;
 	vec3 ambient;
 	vec3 diffuse;
 	vec3 specular;
@@ -29,9 +30,11 @@ void main()
 {
 	//环境光
 	vec3 ambient = light.ambient * material.ambient;
+
 	//漫反射
+	//光线方向(由片段指向光源)
+	vec3 lightDir = normalize(-light.direction);
 	vec3 norm = normalize(Normal);
-	vec3 lightDir = normalize(lightPos - FragPos);
 	float diff = max(dot(lightDir,norm),0.0);
 	vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse,TexCoords));
 	//镜面反射
@@ -39,7 +42,6 @@ void main()
 	vec3 reflectDir = reflect(-lightDir,norm);
 	float spec = pow(max(dot(reflectDir,viewDir),0.0),material.shininess);
 	vec3 specular = light.specular * (spec * vec3(texture(material.specular,TexCoords)));
-	//放射光
-	vec3 emission = vec3(texture(material.emission,TexCoords));
-	color = vec4(ambient + diffuse + specular + emission * 0.4,1.0);
+
+	color = vec4(ambient + diffuse + specular,1.0);
 }
