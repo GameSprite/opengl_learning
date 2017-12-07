@@ -282,6 +282,9 @@ int main(int argc, char** argv)
 		GLint lightSpotCutoffLoc = glGetUniformLocation(shader.programId, "light.cutoff");
 		glUniform1f(lightSpotCutoffLoc,glm::cos(glm::radians(12.5f)));//设置手电筒光的切光角余弦值
 
+		GLint lightSpotOutCutoffLoc = glGetUniformLocation(shader.programId, "light.outCutoff");
+		glUniform1f(lightSpotOutCutoffLoc, glm::cos(glm::radians(17.5f)));
+
 		GLint lightAmbientLoc = glGetUniformLocation(shader.programId, "light.ambient");
 		glUniform3f(lightAmbientLoc, 0.2f, 0.2f, 0.2f);
 

@@ -12,6 +12,7 @@ struct Light
 	vec3 position;//手电的位置
 	vec3 direction;//手电的照射方向
 	float cutoff;//聚光的切光角的余弦值
+	float outCutoff;//外圆锥的切光角余弦值
 
 	vec3 ambient;
 	vec3 diffuse;
@@ -41,7 +42,7 @@ void main()
 
 	//计算是否在聚光范围内
 	float theta = dot(lightDir,normalize(-light.direction));
-	if(theta > light.cutoff){
+	if(theta > light.outCutoff){
 		//计算光照
 		//漫反射
 		vec3 norm = normalize(Normal);
@@ -55,6 +56,14 @@ void main()
 		//点光源光照强度衰减
 		float distance = length(lightVec);
 		float attenuation = 1.0f / (light.constant + light.linear * distance + light.quadratic*(distance*distance));
+
+		//软化边缘
+		float epsilon = light.cutoff - light.outCutoff;
+		float intensity = clamp((theta - light.outCutoff)/epsilon,0.0,1.0);
+
+		diffuse *= intensity;
+		specular *= intensity;
+
 		color = vec4((ambient + diffuse + specular)*attenuation,1.0);
 	}else{
 		//使用环境光和漫反射纹理
