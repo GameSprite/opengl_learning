@@ -273,11 +273,14 @@ int main(int argc, char** argv)
 		GLint matShininessLoc = glGetUniformLocation(shader.programId, "material.shininess");//设置高光值
 		glUniform1f(matShininessLoc, 32.0);
 
-		GLint lightColorLoc = glGetUniformLocation(shader.programId, "lightColor");
-		glUniform3f(lightColorLoc, 1.0f, 1.0f, 1.0f); //把光源设置为白色(不再使用，使用Light代替)
-
 		GLint lightPosLoc = glGetUniformLocation(shader.programId, "light.position");
-		glUniform3f(lightPosLoc, lightPos.x, lightPos.y, lightPos.z);
+		glUniform3f(lightPosLoc, camera.Position.x, camera.Position.y, camera.Position.z);
+
+		GLint lightSpotdirLoc = glGetUniformLocation(shader.programId, "light.direction");
+		glUniform3f(lightSpotdirLoc,camera.Front.x,camera.Front.y,camera.Front.z);//手电筒的照射方向和摄像机
+
+		GLint lightSpotCutoffLoc = glGetUniformLocation(shader.programId, "light.cutoff");
+		glUniform1f(lightSpotCutoffLoc,glm::cos(glm::radians(12.5f)));//设置手电筒光的切光角余弦值
 
 		GLint lightAmbientLoc = glGetUniformLocation(shader.programId, "light.ambient");
 		glUniform3f(lightAmbientLoc, 0.2f, 0.2f, 0.2f);
@@ -287,9 +290,6 @@ int main(int argc, char** argv)
 
 		GLint lightSpecularLoc = glGetUniformLocation(shader.programId, "light.specular");
 		glUniform3f(lightSpecularLoc, 1.0f, 1.0f, 1.0f);
-		
-		GLint lightDirectionLoc = glGetUniformLocation(shader.programId, "light.direction");
-		glUniform3f(lightDirectionLoc, -0.2f, -1.0f, -0.3f);
 
 		//衰减
 		glUniform1f(glGetUniformLocation(shader.programId,"light.constant"), 1.0f);
@@ -328,21 +328,21 @@ int main(int argc, char** argv)
 		}
 
 
-		//draw the lamp,again build the appropriate shader
-		lampshader.use();
-		modelLoc = glGetUniformLocation(lampshader.programId,"model");
-		viewLoc = glGetUniformLocation(lampshader.programId,"view");
-		projectionLoc = glGetUniformLocation(lampshader.programId,"projection");
-		//set matrices
-		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
-		model = glm::mat4();
-		model = glm::translate(model, lightPos);
-		model = glm::scale(model, glm::vec3(0.1f));//make it a smaller cube
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		////draw the lamp,again build the appropriate shader
+		//lampshader.use();
+		//modelLoc = glGetUniformLocation(lampshader.programId,"model");
+		//viewLoc = glGetUniformLocation(lampshader.programId,"view");
+		//projectionLoc = glGetUniformLocation(lampshader.programId,"projection");
+		////set matrices
+		//glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+		//glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+		//model = glm::mat4();
+		//model = glm::translate(model, lightPos);
+		//model = glm::scale(model, glm::vec3(0.1f));//make it a smaller cube
+		//glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
-		glBindVertexArray(lightVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		//glBindVertexArray(lightVAO);
+		//glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
 
 		glfwSwapBuffers(window); // 交换缓存
