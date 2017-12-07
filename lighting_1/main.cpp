@@ -293,8 +293,8 @@ int main(int argc, char** argv)
 
 		//衰减
 		glUniform1f(glGetUniformLocation(shader.programId,"light.constant"), 1.0f);
-		glUniform1f(glGetUniformLocation(shader.programId, "light.linear"), 0.09f);
-		glUniform1f(glGetUniformLocation(shader.programId,"light.quadratic"),0.032f);
+		glUniform1f(glGetUniformLocation(shader.programId, "light.linear"), 0.07f);
+		glUniform1f(glGetUniformLocation(shader.programId, "light.quadratic"), 0.017f);
 
 		GLint modelLoc = glGetUniformLocation(shader.programId, "model");
 		GLint viewLoc = glGetUniformLocation(shader.programId, "view");
@@ -326,22 +326,24 @@ int main(int argc, char** argv)
 			glUniformMatrix4fv(modelLoc,1,GL_FALSE,glm::value_ptr(model));
 			glDrawArrays(GL_TRIANGLES,0,36);
 		}
-		//draw the lamp,again build the appropriate shader
-		//lampshader.use();
-		//modelLoc = glGetUniformLocation(lampshader.programId,"model");
-		//viewLoc = glGetUniformLocation(lampshader.programId,"view");
-		//projectionLoc = glGetUniformLocation(lampshader.programId,"projection");
-		////set matrices
-		//glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-		//glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
-		//model = glm::mat4();
-		//model = glm::translate(model, lightPos);
-		//model = glm::scale(model, glm::vec3(0.2f));//make it a smaller cube
-		//glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
-		//glBindVertexArray(lightVAO);
-		//glDrawArrays(GL_TRIANGLES, 0, 36);
-		//glBindVertexArray(0);
+
+		//draw the lamp,again build the appropriate shader
+		lampshader.use();
+		modelLoc = glGetUniformLocation(lampshader.programId,"model");
+		viewLoc = glGetUniformLocation(lampshader.programId,"view");
+		projectionLoc = glGetUniformLocation(lampshader.programId,"projection");
+		//set matrices
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+		model = glm::mat4();
+		model = glm::translate(model, lightPos);
+		model = glm::scale(model, glm::vec3(0.1f));//make it a smaller cube
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+		glBindVertexArray(lightVAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
 
 		glfwSwapBuffers(window); // 交换缓存
 	}

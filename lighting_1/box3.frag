@@ -46,6 +46,6 @@ void main()
 	vec3 specular = light.specular * (spec * vec3(texture(material.specular,TexCoords)));
 	//点光源光照强度衰减
 	float distance = length(lightVec);
-	float attenuation = 1.0f / light.constant + light.linear * distance + light.quadratic*(distance*distance);
+	float attenuation = 1.0f / (light.constant + light.linear * distance + light.quadratic*(distance*distance));
 	color = vec4((ambient + diffuse + specular)*attenuation,1.0);
 }
