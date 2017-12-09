@@ -151,6 +151,13 @@ int main(int argc, char** argv)
 		glm::vec3(1.5f, 0.2f, -1.5f),
 		glm::vec3(-1.3f, 1.0f, -1.5f)
 	};
+	// Positions of the 4个点光源位置
+	glm::vec3 pointLightPositions[] = {
+		glm::vec3(0.7f, 0.2f, 2.0f),
+		glm::vec3(2.3f, -3.3f, -4.0f),
+		glm::vec3(-4.0f, 2.0f, -12.0f),
+		glm::vec3(0.0f, 0.0f, -3.0f)
+	};
 	// 创建缓存对象
 	GLuint VAOId, VBOId;
 	glGenVertexArrays(1, &VAOId);
@@ -224,7 +231,7 @@ int main(int argc, char** argv)
 	glBindVertexArray(0);
 
 	// Section2 准备着色器程序
-	Shader shader("box3.vertex", "box3.frag");
+	Shader shader("box4.vertex", "box4.frag");
 	Shader lampshader("light.vertex", "light.frag");
 
 	glEnable(GL_DEPTH_TEST);
@@ -244,22 +251,16 @@ int main(int argc, char** argv)
 
 		// 这里填写场景绘制代码
 		shader.use();
-		GLint viewPosLoc = glGetUniformLocation(shader.programId, "viewPos");
-		glUniform3f(viewPosLoc, camera.Position.x, camera.Position.y, camera.Position.z);
-
-		//GLint objectColorLoc = glGetUniformLocation(shader.programId, "objectColor");
-		//glUniform3f(objectColorLoc, 1.0f, 0.5f, 0.31f);// 珊瑚红
-
 		GLint matAmbientLoc = glGetUniformLocation(shader.programId, "material.ambient");
 		glUniform3f(matAmbientLoc, 1.0f, 0.5f, 0.31f);
 
-		GLint matDiffuseLoc = glGetUniformLocation(shader.programId, "material.diffuse");
+		GLint matDiffuseLoc = glGetUniformLocation(shader.programId, "material.diffuse");//漫反射贴图
 		//glUniform3f(matDiffuseLoc, 1.0f, 0.5f, 0.31f);
 		glUniform1i(matDiffuseLoc,0);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, diffuseTexture);
 
-		GLint matSpecularLoc = glGetUniformLocation(shader.programId, "material.specular");//镜面因子
+		GLint matSpecularLoc = glGetUniformLocation(shader.programId, "material.specular");//镜面贴图
 		//glUniform3f(matSpecularLoc, 0.5f, 0.5f, 0.5f);
 		glUniform1i(matSpecularLoc, 1);
 		glActiveTexture(GL_TEXTURE1);
@@ -273,31 +274,47 @@ int main(int argc, char** argv)
 		GLint matShininessLoc = glGetUniformLocation(shader.programId, "material.shininess");//设置高光值
 		glUniform1f(matShininessLoc, 32.0);
 
-		GLint lightPosLoc = glGetUniformLocation(shader.programId, "light.position");
-		glUniform3f(lightPosLoc, camera.Position.x, camera.Position.y, camera.Position.z);
-
-		GLint lightSpotdirLoc = glGetUniformLocation(shader.programId, "light.direction");
-		glUniform3f(lightSpotdirLoc,camera.Front.x,camera.Front.y,camera.Front.z);//手电筒的照射方向和摄像机
-
-		GLint lightSpotCutoffLoc = glGetUniformLocation(shader.programId, "light.cutoff");
-		glUniform1f(lightSpotCutoffLoc,glm::cos(glm::radians(12.5f)));//设置手电筒光的切光角余弦值
-
-		GLint lightSpotOutCutoffLoc = glGetUniformLocation(shader.programId, "light.outCutoff");
-		glUniform1f(lightSpotOutCutoffLoc, glm::cos(glm::radians(17.5f)));
-
-		GLint lightAmbientLoc = glGetUniformLocation(shader.programId, "light.ambient");
-		glUniform3f(lightAmbientLoc, 0.2f, 0.2f, 0.2f);
-
-		GLint lightDiffuseLoc = glGetUniformLocation(shader.programId, "light.diffuse");
-		glUniform3f(lightDiffuseLoc, 0.5f, 0.5f, 0.5f);// 让我们把这个光调暗一点，这样会看起来更自然
-
-		GLint lightSpecularLoc = glGetUniformLocation(shader.programId, "light.specular");
-		glUniform3f(lightSpecularLoc, 1.0f, 1.0f, 1.0f);
-
-		//衰减
-		glUniform1f(glGetUniformLocation(shader.programId,"light.constant"), 1.0f);
-		glUniform1f(glGetUniformLocation(shader.programId, "light.linear"), 0.07f);
-		glUniform1f(glGetUniformLocation(shader.programId, "light.quadratic"), 0.017f);
+		//通用数据
+		GLint viewPosLoc = glGetUniformLocation(shader.programId, "viewPos");
+		glUniform3f(viewPosLoc, camera.Position.x, camera.Position.y, camera.Position.z);
+		//平行光数据
+		glUniform3f(glGetUniformLocation(shader.programId, "dirLight.direction"),-0.2f, -1.0f, -0.3f);
+		glUniform3f(glGetUniformLocation(shader.programId, "dirLight.ambient"),0.05f, 0.05f, 0.05f);
+		glUniform3f(glGetUniformLocation(shader.programId, "dirLight.diffuse"),0.4f, 0.4f, 0.4f);
+		glUniform3f(glGetUniformLocation(shader.programId, "dirLight.specular"), 0.5f, 0.5f, 0.5f);
+		//点光源数据
+		// Point light 1
+		glUniform3f(glGetUniformLocation(shader.programId, "pointLights[0].position"), pointLightPositions[0].x, pointLightPositions[0].y, pointLightPositions[0].z);
+		glUniform3f(glGetUniformLocation(shader.programId, "pointLights[0].ambient"), 0.05f, 0.05f, 0.05f);
+		glUniform3f(glGetUniformLocation(shader.programId, "pointLights[0].diffuse"), 0.8f, 0.8f, 0.8f);
+		glUniform3f(glGetUniformLocation(shader.programId, "pointLights[0].specular"), 1.0f, 1.0f, 1.0f);
+		glUniform1f(glGetUniformLocation(shader.programId, "pointLights[0].constant"), 1.0f);
+		glUniform1f(glGetUniformLocation(shader.programId, "pointLights[0].linear"), 0.09);
+		glUniform1f(glGetUniformLocation(shader.programId, "pointLights[0].quadratic"), 0.032);
+		// Point light 2
+		glUniform3f(glGetUniformLocation(shader.programId, "pointLights[1].position"), pointLightPositions[1].x, pointLightPositions[1].y, pointLightPositions[1].z);
+		glUniform3f(glGetUniformLocation(shader.programId, "pointLights[1].ambient"), 0.05f, 0.05f, 0.05f);
+		glUniform3f(glGetUniformLocation(shader.programId, "pointLights[1].diffuse"), 0.8f, 0.8f, 0.8f);
+		glUniform3f(glGetUniformLocation(shader.programId, "pointLights[1].specular"), 1.0f, 1.0f, 1.0f);
+		glUniform1f(glGetUniformLocation(shader.programId, "pointLights[1].constant"), 1.0f);
+		glUniform1f(glGetUniformLocation(shader.programId, "pointLights[1].linear"), 0.09);
+		glUniform1f(glGetUniformLocation(shader.programId, "pointLights[1].quadratic"), 0.032);
+		// Point light 3
+		glUniform3f(glGetUniformLocation(shader.programId, "pointLights[2].position"), pointLightPositions[2].x, pointLightPositions[2].y, pointLightPositions[2].z);
+		glUniform3f(glGetUniformLocation(shader.programId, "pointLights[2].ambient"), 0.05f, 0.05f, 0.05f);
+		glUniform3f(glGetUniformLocation(shader.programId, "pointLights[2].diffuse"), 0.8f, 0.8f, 0.8f);
+		glUniform3f(glGetUniformLocation(shader.programId, "pointLights[2].specular"), 1.0f, 1.0f, 1.0f);
+		glUniform1f(glGetUniformLocation(shader.programId, "pointLights[2].constant"), 1.0f);
+		glUniform1f(glGetUniformLocation(shader.programId, "pointLights[2].linear"), 0.09);
+		glUniform1f(glGetUniformLocation(shader.programId, "pointLights[2].quadratic"), 0.032);
+		// Point light 4
+		glUniform3f(glGetUniformLocation(shader.programId, "pointLights[3].position"), pointLightPositions[3].x, pointLightPositions[3].y, pointLightPositions[3].z);
+		glUniform3f(glGetUniformLocation(shader.programId, "pointLights[3].ambient"), 0.05f, 0.05f, 0.05f);
+		glUniform3f(glGetUniformLocation(shader.programId, "pointLights[3].diffuse"), 0.8f, 0.8f, 0.8f);
+		glUniform3f(glGetUniformLocation(shader.programId, "pointLights[3].specular"), 1.0f, 1.0f, 1.0f);
+		glUniform1f(glGetUniformLocation(shader.programId, "pointLights[3].constant"), 1.0f);
+		glUniform1f(glGetUniformLocation(shader.programId, "pointLights[3].linear"), 0.09);
+		glUniform1f(glGetUniformLocation(shader.programId, "pointLights[3].quadratic"), 0.032);
 
 		GLint modelLoc = glGetUniformLocation(shader.programId, "model");
 		GLint viewLoc = glGetUniformLocation(shader.programId, "view");
@@ -331,21 +348,25 @@ int main(int argc, char** argv)
 		}
 
 
-		////draw the lamp,again build the appropriate shader
-		//lampshader.use();
-		//modelLoc = glGetUniformLocation(lampshader.programId,"model");
-		//viewLoc = glGetUniformLocation(lampshader.programId,"view");
-		//projectionLoc = glGetUniformLocation(lampshader.programId,"projection");
-		////set matrices
-		//glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-		//glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
-		//model = glm::mat4();
-		//model = glm::translate(model, lightPos);
-		//model = glm::scale(model, glm::vec3(0.1f));//make it a smaller cube
-		//glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//draw the lamp,again build the appropriate shader
+		lampshader.use();
+		modelLoc = glGetUniformLocation(lampshader.programId,"model");
+		viewLoc = glGetUniformLocation(lampshader.programId,"view");
+		projectionLoc = glGetUniformLocation(lampshader.programId,"projection");
+		//set matrices
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-		//glBindVertexArray(lightVAO);
-		//glDrawArrays(GL_TRIANGLES, 0, 36);
+		//draw 4 point lights
+		glBindVertexArray(lightVAO);
+		for (size_t i = 0; i < 4; i++)
+		{
+			model = glm::mat4();
+			model = glm::translate(model, pointLightPositions[i]);
+			model = glm::scale(model, glm::vec3(0.1f));//make it a smaller cube
+			glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
 		glBindVertexArray(0);
 
 		glfwSwapBuffers(window); // 交换缓存
