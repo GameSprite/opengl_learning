@@ -1,10 +1,10 @@
-#version 330
+#version 330 core
 struct Material
 {
 	sampler2D diffuse;
 	sampler2D specular;
 	sampler2D emission;
-	float shininess;//¸ß¹âÖµ
+	float shininess;//é«˜å…‰å€¼
 };
 struct DirLight
 {
@@ -17,50 +17,70 @@ struct PointLight
 {
 	vec3 position;
 
-    float constant;//Ë¥¼õ³£ÊıÏîÏµÊı
-    float linear;//Ë¥¼õÏßĞÔÏµÊı
-    float quadratic;//Ë¥¼õ2´ÎÏîÏµÊı
+    float constant;//è¡°å‡å¸¸æ•°é¡¹ç³»æ•°
+    float linear;//è¡°å‡çº¿æ€§ç³»æ•°
+    float quadratic;//è¡°å‡2æ¬¡é¡¹ç³»æ•°
 
 	vec3 ambient;
 	vec3 diffuse;
 	vec3 specular; 
 };
+struct SpotLight{
+	//ç‚¹å…‰æºå±æ€§
+	vec3 position;
+
+    float constant;//è¡°å‡å¸¸æ•°é¡¹ç³»æ•°
+    float linear;//è¡°å‡çº¿æ€§ç³»æ•°
+    float quadratic;//è¡°å‡2æ¬¡é¡¹ç³»æ•°
+
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular; 
+	//èšå…‰å±æ€§
+	vec3 direction;//æ‰‹ç”µå…‰æ–¹å‘
+	float cutoff;//å†…åœ†é”¥åˆ‡å…‰è§’ä½™å¼¦å€¼
+	float outCutoff;//å¤–åœ†é”¥åˆ‡å…‰è§’ä½™å¼¦å€¼
+};
+#define NR_POINT_LIGHTS 4
+
 in vec3 Normal;
 in vec3 FragPos;
 in vec2 TexCoords;
 out vec4 color;
 
+uniform vec3 viewPos;
 uniform Material material;
-uniform DirLight dirLight; //Æ½ĞĞ¹â
-#define NR_POINT_LIGHTS 4
-uniform PointLight pointLights[NR_POINT_LIGHTS];//µã¹âÔ´Êı×é
-
+uniform DirLight dirLight; //å¹³è¡Œå…‰
+uniform PointLight pointLights[NR_POINT_LIGHTS];//ç‚¹å…‰æºæ•°ç»„
+uniform SpotLight spotLight;//æ‰‹ç”µå…‰
 vec3 CalcDirLight(DirLight dirLight,vec3 normal,vec3 viewDir);
 vec3 CalcPointLight(PointLight pointLight,vec3 normal, vec3 fragPos,vec3 viewDir);
-
+vec3 CalcSpotLight(SpotLight spotLight,vec3 normal,vec3 fragPos,vec3 viewDir);
 void main(){
 	vec3 norm = normalize(Normal);
-	vec3 viewDir = normalize(viewPos - FragPos);//×¢ÒâºÍÊµ¼ÊÊÇ·´ÏòµÄ
-	//¼ÆËãÆ½ĞĞ¹âÕÕ
+	vec3 viewDir = normalize(viewPos - FragPos);//æ³¨æ„å’Œå®é™…æ˜¯åå‘çš„
+	//è®¡ç®—å¹³è¡Œå…‰ç…§
 	vec3 result = CalcDirLight(dirLight,norm,viewDir);
-	//¼ÆËãµã¹â¹âÕÕ
+	//è®¡ç®—ç‚¹å…‰å…‰ç…§
 	for(int i=0;i<NR_POINT_LIGHTS;i++)
 		result += CalcPointLight(pointLights[i],norm,FragPos,viewDir);
+	//è®¡ç®—èšå…‰å…‰ç…§
+	result += CalcSpotLight(spotLight,norm,FragPos,viewDir);
 	color = vec4(result,1.0f);
 }
 
 vec3 CalcDirLight(DirLight dirLight,vec3 normal,vec3 viewDir){
-	vec3 lightDir = normal(-dirLight.direction);
-	//¼ÆËã»·¾³¹â
+	vec3 lightDir = normalize(-dirLight.direction);
+	//è®¡ç®—ç¯å¢ƒå…‰
 	vec3 ambient = dirLight.ambient * vec3(texture(material.diffuse, TexCoords));
-    //¼ÆËãÂş·´Éä¹â
+    //è®¡ç®—æ¼«åå°„å…‰
 	float diff = max(dot(lightDir,normal),0.0);
 	vec3 diffuse = diff * dirLight.diffuse * vec3(texture(material.diffuse,TexCoords));
-	//¼ÆËã¾µÃæ·´Éä¹â
+	//è®¡ç®—é•œé¢åå°„å…‰
 	vec3 reflectDir = reflect(-lightDir,normal);
 	float spec = pow(max(dot(reflectDir,viewDir),0.0),material.shininess);
 	vec3 specular = spec * dirLight.specular * vec3(texture(material.specular,TexCoords));
-	//ºÏ²¢¹âÕÕ·ÖÁ¿
+	//åˆå¹¶å…‰ç…§åˆ†é‡
 	return (ambient + diffuse + specular);
 }
 vec3 CalcPointLight(PointLight pointLight,vec3 normal, vec3 fragPos,vec3 viewDir){
@@ -82,4 +102,35 @@ vec3 CalcPointLight(PointLight pointLight,vec3 normal, vec3 fragPos,vec3 viewDir
 	specular *= attenuation;
 
 	return (ambient + diffuse + specular);
+}
+vec3 CalcSpotLight(SpotLight spotLight,vec3 normal,vec3 fragPos,vec3 viewDir){
+	vec3 direction = normalize(-spotLight.direction);
+	vec3 lightDir = normalize(spotLight.position - fragPos);
+
+	float cos_theta = dot(direction,lightDir);
+	if(cos_theta < spotLight.outCutoff){
+		vec3 ambient = spotLight.ambient * vec3(texture(material.diffuse,TexCoords));
+
+		float diff = max(dot(normal,lightDir),0.0);
+		vec3 diffuse = diff * spotLight.diffuse * vec3(texture(material.diffuse,TexCoords));
+
+		vec3 reflectDir = reflect(-lightDir,normal);
+		float spec = pow(max(dot(viewDir,reflectDir),0.0),material.shininess);
+		vec3 specular = spec * spotLight.specular * vec3(texture(material.specular,TexCoords));
+		//å¼ºåº¦è¡°å‡
+		float dis = length(spotLight.position - fragPos);
+		float attenuation = 1.0/(spotLight.constant + spotLight.linear * dis + spotLight.quadratic * dis * dis);
+		//è¾¹ç¼˜è½¯åŒ–
+		float epsilon = spotLight.cutoff - spotLight.outCutoff;
+		float intensity = clamp((cos_theta - spotLight.outCutoff)/epsilon,0.0,1.0);
+
+		diffuse *= intensity;
+		specular *= intensity;
+
+		return (ambient + diffuse + specular) * attenuation;
+
+	}else{
+		//å¦‚æœè¦å…‰æ‰¾ä¸åˆ°çš„åœ°æ–¹å…¨é»‘çš„è¯ï¼Œå…¶å®å¯ä»¥è¿”å›(0,0,0)é»‘è‰²
+		return spotLight.ambient * vec3(texture(material.diffuse,TexCoords));
+	}
 }

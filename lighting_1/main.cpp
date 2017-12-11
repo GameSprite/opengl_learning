@@ -315,6 +315,17 @@ int main(int argc, char** argv)
 		glUniform1f(glGetUniformLocation(shader.programId, "pointLights[3].constant"), 1.0f);
 		glUniform1f(glGetUniformLocation(shader.programId, "pointLights[3].linear"), 0.09);
 		glUniform1f(glGetUniformLocation(shader.programId, "pointLights[3].quadratic"), 0.032);
+		//手电光
+		glUniform3f(glGetUniformLocation(shader.programId,"spotLight.position"),camera.Position.x,camera.Position.y,camera.Position.z);
+		glUniform1f(glGetUniformLocation(shader.programId, "spotLight.constant"),1.0);
+		glUniform1f(glGetUniformLocation(shader.programId, "spotLight.linear"),0.09);
+		glUniform1f(glGetUniformLocation(shader.programId, "spotLight.quadratic"),0.032);
+		glUniform3f(glGetUniformLocation(shader.programId, "spotLight.ambient"), 0.2,0.2,0.2);
+		glUniform3f(glGetUniformLocation(shader.programId, "spotLight.diffuse"),0.5,0.5,0.5);
+		glUniform3f(glGetUniformLocation(shader.programId, "spotLight.specular"),1.0,1.0,1.0);
+		glUniform3f(glGetUniformLocation(shader.programId, "spotLight.direction"),camera.Front.x,camera.Front.y,camera.Front.z);
+		glUniform1f(glGetUniformLocation(shader.programId, "spotLight.cutoff"), glm::cos(glm::radians(10.5f)));
+		glUniform1f(glGetUniformLocation(shader.programId, "spotLight.outCutoff"), glm::cos(glm::radians(12.5f)));
 
 		GLint modelLoc = glGetUniformLocation(shader.programId, "model");
 		GLint viewLoc = glGetUniformLocation(shader.programId, "view");
