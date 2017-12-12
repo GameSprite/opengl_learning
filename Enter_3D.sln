@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "enter_3d_camera", "enter_3d
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lighting_1", "lighting_1\lighting_1.vcxproj", "{EE2CE312-2C72-4A2A-AD92-96F5B62E6921}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Open_Assimp", "Open_Assimp\Open_Assimp.vcxproj", "{BFC609DE-E4A5-4632-8FDC-BB0BB9189EFD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -33,6 +35,10 @@ Global
 		{EE2CE312-2C72-4A2A-AD92-96F5B62E6921}.Debug|Win32.Build.0 = Debug|Win32
 		{EE2CE312-2C72-4A2A-AD92-96F5B62E6921}.Release|Win32.ActiveCfg = Release|Win32
 		{EE2CE312-2C72-4A2A-AD92-96F5B62E6921}.Release|Win32.Build.0 = Release|Win32
+		{BFC609DE-E4A5-4632-8FDC-BB0BB9189EFD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BFC609DE-E4A5-4632-8FDC-BB0BB9189EFD}.Debug|Win32.Build.0 = Debug|Win32
+		{BFC609DE-E4A5-4632-8FDC-BB0BB9189EFD}.Release|Win32.ActiveCfg = Release|Win32
+		{BFC609DE-E4A5-4632-8FDC-BB0BB9189EFD}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
