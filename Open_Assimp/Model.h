@@ -1,9 +1,12 @@
 #ifndef _MODEL_H_
 #define _MODEL_H_
 #include "Mesh.h"
+#include <SOIL\SOIL.h>
 #include <assimp\Importer.hpp>
 #include <assimp\scene.h>
 #include <assimp\postprocess.h>
+
+GLint TextureFromFile(const char* path, string directory);
 /********************************************************
 *				   加载、转换后的模型                     *
 *********************************************************/
@@ -81,7 +84,37 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene){
 
 	if (mesh->mMaterialIndex >= 0){//网格可以没有材质索引
 		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-
+		
 	}
+}
+vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName){
+	vector<Texture> textures;
+	for (size_t i = 0; i < mat->GetTextureCount(type); i++)
+	{
+		aiString str;
+		mat->GetTexture(type, i, &str);
+		Texture texture;
+		texture.id = 
+	}
+}
+
+GLint TextureFromFile(const char* path, string directory)
+{
+	string filename = directory + '/' + string(path);
+	GLuint texture2D;
+	glGenTextures(1, &texture2D);
+	int width, height;
+	unsigned char* image = SOIL_load_image(filename.c_str(), &width, &height, 0, SOIL_LOAD_RGB);
+	glBindTexture(GL_TEXTURE_2D, texture2D);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	SOIL_free_image_data(image);
+	return texture2D;
 }
 #endif
