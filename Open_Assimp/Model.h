@@ -84,8 +84,12 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene){
 
 	if (mesh->mMaterialIndex >= 0){//网格可以没有材质索引
 		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-		
+		vector<Texture> diffuseMaps = this->loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+		textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+		vector<Texture> specularMaps = this->loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+		textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 	}
+	return Mesh(vertices, indices, textures);
 }
 vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName){
 	vector<Texture> textures;
@@ -94,8 +98,12 @@ vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type,
 		aiString str;
 		mat->GetTexture(type, i, &str);
 		Texture texture;
-		texture.id = 
+		texture.id = TextureFromFile(str.C_Str(), this->directory);
+		texture.type = typeName;
+		texture.path = str;
+		textures.push_back(texture);
 	}
+	return textures;
 }
 
 GLint TextureFromFile(const char* path, string directory)

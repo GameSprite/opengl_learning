@@ -21,6 +21,7 @@ struct Texture
 {
 	GLuint id;
 	string type;//纹理类型，diffuse或者specular
+	aiString path;
 };
 
 /***********************************************
