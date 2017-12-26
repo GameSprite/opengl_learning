@@ -16,6 +16,7 @@
 // 包含着色器加载库
 #include "shader.h"
 #include "Camera.h"
+#include "Model.h"
 
 // 键盘回调函数声明
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
@@ -90,6 +91,11 @@ int main(int argc, char** argv)
 	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
 	glEnable(GL_DEPTH_TEST);
+
+	Shader shader("model_loading.vs", "model_loading.frag");
+	Model outModel("nanosuit/nanosuit.obj");
+	
+
 	// 开始游戏主循环
 	while (!glfwWindowShouldClose(window))
 	{
@@ -103,6 +109,18 @@ int main(int argc, char** argv)
 		// 清除颜色缓冲区 重置为指定颜色
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		shader.use();
+		glm::mat4 projection = glm::perspective(camera.Zoom, (float)WINDOW_WIDTH / WINDOW_HEIGHT, 0.1f, 100.0f);
+		glm::mat4 view = camera.getViewMatrix();
+		glUniformMatrix4fv(glGetUniformLocation(shader.programId, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+		glUniformMatrix4fv(glGetUniformLocation(shader.programId, "view"), 1, GL_FALSE, glm::value_ptr(view));
+		glm::mat4 model;
+		model = glm::translate(model, glm::vec3(0.0f,-1.75f,0.0f));
+		model = glm::scale(model, glm::vec3(0.2f,0.2f,0.2f));
+		glUniformMatrix4fv(glGetUniformLocation(shader.programId, "model"), 1, GL_FALSE, glm::value_ptr(model));
+
+		outModel.Draw(shader);
 		glfwSwapBuffers(window); // 交换缓存
 	}
 	glfwTerminate();

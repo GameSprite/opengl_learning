@@ -17,6 +17,7 @@ public:
 private:
 	vector<Mesh> meshes;
 	string directory;
+	vector<Texture> textures_loaded;
 
 	void loadModel(string path);
 	void processNode(aiNode* node, const aiScene* scene);
@@ -97,11 +98,23 @@ vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type,
 	{
 		aiString str;
 		mat->GetTexture(type, i, &str);
-		Texture texture;
-		texture.id = TextureFromFile(str.C_Str(), this->directory);
-		texture.type = typeName;
-		texture.path = str;
-		textures.push_back(texture);
+		//先在已加载过的纹理中查询
+		bool skip = false;
+		for (auto iter = (this->textures_loaded).begin(); iter != this->textures_loaded.end(); iter++){
+			if ((*iter).path == str){
+				skip = true;
+				textures.push_back(*iter);
+				break;
+			}
+		}
+		if (skip){
+			Texture texture;
+			texture.id = TextureFromFile(str.C_Str(), this->directory);
+			texture.type = typeName;
+			texture.path = str;
+			textures.push_back(texture);
+			this->textures_loaded.push_back(texture);
+		}
 	}
 	return textures;
 }

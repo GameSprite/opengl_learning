@@ -6,7 +6,7 @@
 #include <glm\glm.hpp>
 #include <GLEW\glew.h>
 #include "shader.h"
-
+#include <assimp\types.h>
 using namespace std;
 
 /************Vertex***************/
@@ -20,7 +20,7 @@ struct Vertex
 struct Texture
 {
 	GLuint id;
-	string type;//纹理类型，diffuse或者specular
+	string type;
 	aiString path;
 };
 
