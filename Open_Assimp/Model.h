@@ -64,7 +64,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene){
 	vector<GLuint> indices;
 	vector<Texture> textures;
 
-	for (size_t i = 0; mesh->mNumVertices; i++){
+	for (size_t i = 0; i < mesh->mNumVertices; i++){
 		Vertex vertex;
 		vertex.Position = glm::vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
 		vertex.Normal = glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
@@ -107,7 +107,7 @@ vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type,
 				break;
 			}
 		}
-		if (skip){
+		if (!skip){
 			Texture texture;
 			texture.id = TextureFromFile(str.C_Str(), this->directory);
 			texture.type = typeName;
