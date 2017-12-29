@@ -7,11 +7,11 @@ float LinearizeDepth(float depth)
 {
     float near = 0.1;
     float far = 100.0;
-    float z = depth * 2.0 - 1.0; //back to NDC
+    float z = depth * 2.0 - 1.0; //back to NDC and make depth between [0,1]
     return (2.0 * near) / (far + near - z * (far - near));
 }
 void main()
 {
-    FragColor = texture(texture1,TexCoords);
-    //FragColor = vec4(vec3(LinearizeDepth(gl_FragCoord.z)),1.0f);
+    //FragColor = texture(texture1,TexCoords);
+    FragColor = vec4(vec3(LinearizeDepth(gl_FragCoord.z)),1.0f);
 }
