@@ -90,7 +90,7 @@ int main(int argc, char** argv)
 	// 设置视口参数
 	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST);//开启深度测试
 
 	Shader shader("model_loading.vs", "model_loading.frag");
 	Model outModel("nanosuit/nanosuit.obj");

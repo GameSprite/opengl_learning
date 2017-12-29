@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lighting_1", "lighting_1\li
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Open_Assimp", "Open_Assimp\Open_Assimp.vcxproj", "{BFC609DE-E4A5-4632-8FDC-BB0BB9189EFD}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Depth_test", "Depth_test\Depth_test.vcxproj", "{C3970EC3-7C6B-47F2-AD52-9DEFCA026AFE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -39,6 +41,10 @@ Global
 		{BFC609DE-E4A5-4632-8FDC-BB0BB9189EFD}.Debug|Win32.Build.0 = Debug|Win32
 		{BFC609DE-E4A5-4632-8FDC-BB0BB9189EFD}.Release|Win32.ActiveCfg = Release|Win32
 		{BFC609DE-E4A5-4632-8FDC-BB0BB9189EFD}.Release|Win32.Build.0 = Release|Win32
+		{C3970EC3-7C6B-47F2-AD52-9DEFCA026AFE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C3970EC3-7C6B-47F2-AD52-9DEFCA026AFE}.Debug|Win32.Build.0 = Debug|Win32
+		{C3970EC3-7C6B-47F2-AD52-9DEFCA026AFE}.Release|Win32.ActiveCfg = Release|Win32
+		{C3970EC3-7C6B-47F2-AD52-9DEFCA026AFE}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
