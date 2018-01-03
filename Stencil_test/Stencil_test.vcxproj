@@ -76,6 +76,8 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="stencil.fs" />
+    <None Include="stencil.vs" />
     <None Include="stencil_test.fs" />
     <None Include="stencil_test.vs" />
     <None Include="stencil_test_singleline.fs" />

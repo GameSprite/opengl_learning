@@ -40,6 +40,12 @@
     <None Include="stencil_test_singleline.fs">
       <Filter>源文件</Filter>
     </None>
+    <None Include="stencil.vs">
+      <Filter>源文件</Filter>
+    </None>
+    <None Include="stencil.fs">
+      <Filter>源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="texture\marble.jpg">

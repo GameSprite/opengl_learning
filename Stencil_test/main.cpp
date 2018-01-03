@@ -1,40 +1,40 @@
-// ÒıÈëGLEW¿â ¶¨Òå¾²Ì¬Á´½Ó
+// å¼•å…¥GLEWåº“ å®šä¹‰é™æ€é“¾æ¥
 #define GLEW_STATIC
 #include <Windows.h>
 #include <debugapi.h>
 #include <stdio.h>
 #include <GLEW/glew.h>
-// ÒıÈëGLFW¿â
+// å¼•å…¥GLFWåº“
 #include <GLFW/glfw3.h>
 #include <SOIL\SOIL.h>
-#include <glm\glm.hpp> //ÒıÈëopengl ÊıÑ§¿â
+#include <glm\glm.hpp> //å¼•å…¥opengl æ•°å­¦åº“
 #include <glm\gtc\matrix_transform.hpp>
 #include <glm\gtc\type_ptr.hpp>
 #include <iostream>
 #include <vector>
 
-// °üº¬×ÅÉ«Æ÷¼ÓÔØ¿â
+// åŒ…å«ç€è‰²å™¨åŠ è½½åº“
 #include "shader.h"
 #include "Camera.h"
 
-// ¼üÅÌ»Øµ÷º¯ÊıÉùÃ÷
+// é”®ç›˜å›è°ƒå‡½æ•°å£°æ˜
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-//Êó±êÒÆ¶¯»Øµ÷º¯ÊıÉùÃ÷
+//é¼ æ ‡ç§»åŠ¨å›è°ƒå‡½æ•°å£°æ˜
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-//Êó±ê¹öÂÖ¹ö¶¯
+//é¼ æ ‡æ»šè½®æ»šåŠ¨
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 void mouse_outIncallback(GLFWwindow* window, int flag);
-//×ÛºÏ´¦Àí¼üÅÌ°´¼ü£¬½â¾ö¿¨¶Ù
+//ç»¼åˆå¤„ç†é”®ç›˜æŒ‰é”®ï¼Œè§£å†³å¡é¡¿
 void Do_Movement();
 
 GLuint loadTexture(const char* path);
-// ¶¨Òå³ÌĞò³£Á¿
+// å®šä¹‰ç¨‹åºå¸¸é‡
 const float WINDOW_WIDTH = 800, WINDOW_HEIGHT = 600;
 float mixvalue = 0.5;
 bool keys[1024] = { false };
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
-//ÏÂÃæ2¸ö±äÁ¿ÓÃÓÚ¼ÆËãÖ¡¼ä¸ô
+//ä¸‹é¢2ä¸ªå˜é‡ç”¨äºè®¡ç®—å¸§é—´éš”
 GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
 bool mouseFirst = true;
@@ -43,13 +43,13 @@ double lastx, lasty;
 int main(int argc, char** argv)
 {
 	/***********************************************************************************/
-	if (!glfwInit())	// ³õÊ¼»¯glfw¿â
+	if (!glfwInit())	// åˆå§‹åŒ–glfwåº“
 	{
 		std::cout << "Error::GLFW could not initialize GLFW!" << std::endl;
 		return -1;
 	}
 
-	// ¿ªÆôOpenGL 3.3 core profile
+	// å¼€å¯OpenGL 3.3 core profile
 	std::cout << "Start OpenGL core profile version 3.3" << std::endl;
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -60,7 +60,7 @@ int main(int argc, char** argv)
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // uncomment this statement to fix compilation on OS X
 #endif
 
-	// ´´½¨´°¿Ú
+	// åˆ›å»ºçª—å£
 	GLFWwindow* window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT,
 		"Lighting", NULL, NULL);
 	if (!window)
@@ -69,19 +69,19 @@ int main(int argc, char** argv)
 		glfwTerminate();
 		return -1;
 	}
-	// ´´½¨µÄ´°¿ÚµÄcontextÖ¸¶¨Îªµ±Ç°context
+	// åˆ›å»ºçš„çª—å£çš„contextæŒ‡å®šä¸ºå½“å‰context
 	glfwMakeContextCurrent(window);
 
-	// ×¢²á´°¿Ú¼üÅÌÊÂ¼ş»Øµ÷º¯Êı
+	// æ³¨å†Œçª—å£é”®ç›˜äº‹ä»¶å›è°ƒå‡½æ•°
 	glfwSetKeyCallback(window, key_callback);
 	glfwSetCursorEnterCallback(window, mouse_outIncallback);
-	//´°¿ÚÊó±êÊÂ¼ş»Øµ÷
+	//çª—å£é¼ æ ‡äº‹ä»¶å›è°ƒ
 	glfwSetCursorPosCallback(window, mouse_callback);
 
 	glfwSetScrollCallback(window, scroll_callback);
 
-	// ³õÊ¼»¯GLEW »ñÈ¡OpenGLº¯Êı
-	glewExperimental = GL_TRUE; // ÈÃglew»ñÈ¡ËùÓĞÍØÕ¹º¯Êı
+	// åˆå§‹åŒ–GLEW è·å–OpenGLå‡½æ•°
+	glewExperimental = GL_TRUE; // è®©glewè·å–æ‰€æœ‰æ‹“å±•å‡½æ•°
 	GLenum status = glewInit();
 	if (status != GLEW_OK)
 	{
@@ -91,16 +91,10 @@ int main(int argc, char** argv)
 		return -1;
 	}
 
-	// ÉèÖÃÊÓ¿Ú²ÎÊı
+	// è®¾ç½®è§†å£å‚æ•°
 	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
 	/**************************************************************************************/
-	glEnable(GL_DEPTH_TEST);
-	//glDepthFunc(GL_ALWAYS);//always pass the depth test (same effect as glDisable(GL_DEPTH_TEST))
-
-	Shader shader("stencil_test.vs", "stencil_test.fs");
-	Shader shaderSingleColor("stencil_test.vs","stencil_test_singleline.fs");
-
 	//vertices data
 	float cubeVertices[] = {
 		// positions          // texture Coords
@@ -157,6 +151,16 @@ int main(int argc, char** argv)
 		5.0f, -0.5f, -5.0f, 2.0f, 2.0f
 	};
 
+	//stencil data å…ˆç”¨ä¸€ä¸ªä½äºå±å¹•ä¸­é—´çš„æ­£æ–¹å½¢åšæ¨¡æ¿
+	float stencilVertices[] = {
+		0.5f, 0.5f, 0.0f,   // å³ä¸Šè§’
+		0.5f, -0.5f, 0.0f,  // å³ä¸‹è§’
+		-0.5f, 0.5f, 0.0f,  // å·¦ä¸Šè§’
+		0.5f, -0.5f, 0.0f,  // å³ä¸‹è§’
+		-0.5f, -0.5f, 0.0f, // å·¦ä¸‹è§’
+		-0.5f, 0.5f, 0.0f   // å·¦ä¸Šè§’
+	};
+
 	//cube VAO
 	GLuint cubeVAO, cubeVBO;
 	glGenVertexArrays(1, &cubeVAO);
@@ -167,9 +171,9 @@ int main(int argc, char** argv)
 
 	glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);//¿ªÆôµÚÒ»¸ö¶¥µãÊôĞÔ
+	glEnableVertexAttribArray(0);//å¼€å¯ç¬¬ä¸€ä¸ªé¡¶ç‚¹å±æ€§
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(1);//¿ªÆôµÚ¶ş¸ö¶¥µãÊôĞÔ
+	glEnableVertexAttribArray(1);//å¼€å¯ç¬¬äºŒä¸ªé¡¶ç‚¹å±æ€§
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 
 	glBindVertexArray(0);
@@ -192,58 +196,98 @@ int main(int argc, char** argv)
 
 	glBindVertexArray(0);
 
+	//stencil rect VAO
+	GLuint stencilVAO, stencilVBO;
+	glGenVertexArrays(1, &stencilVAO);
+	glGenBuffers(1, &stencilVBO);
+	glBindVertexArray(stencilVAO);
+	glBindBuffer(GL_ARRAY_BUFFER,stencilVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(stencilVertices), stencilVertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glBindVertexArray(0);
+
 	//load texture
 	GLuint cubeTexture = loadTexture("texture/marble.jpg");
 	GLuint floorTexture = loadTexture("texture/metal.png");
 
 	//shader
-	shader.use();
-	glUniform1i(glGetUniformLocation(shader.programId, "texture1"), 0);
-	// ¿ªÊ¼ÓÎÏ·Ö÷Ñ­»·
+	Shader shader("stencil_test.vs", "stencil_test.fs");
+	Shader shaderSingleColor("stencil_test.vs", "stencil_test_singleline.fs");
+	Shader stencilShader("stencil.vs", "stencil.fs");
+
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_STENCIL_TEST);
+	// å¼€å§‹æ¸¸æˆä¸»å¾ªç¯
 	while (!glfwWindowShouldClose(window))
 	{
 		GLfloat curFrameTime = (GLfloat)glfwGetTime();
 		deltaTime = curFrameTime - lastFrame;
 		lastFrame = curFrameTime;
 
-		glfwPollEvents(); // ´¦ÀíÀıÈçÊó±ê ¼üÅÌµÈÊÂ¼ş
+		glfwPollEvents(); // å¤„ç†ä¾‹å¦‚é¼ æ ‡ é”®ç›˜ç­‰äº‹ä»¶
 		Do_Movement();
-
-		// render
+		stencilShader.use();
+		///*********************å†™å…¥æ¨¡æ¿ç¼“å†²*****************************/
+		//// æ¸…é™¤é¢œè‰²ç¼“å†²åŒºã€æ·±åº¦ç¼“å†²åŒºã€æ¨¡æ¿ç¼“å†²åŒº
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_TEST);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
+		//å…³é—­é¢œè‰²ç¼“å†²åŒº(å› ä¸ºä¸æ˜¾ç¤ºä½œä¸ºæ¨¡æ¿çš„çŸ©å½¢)ã€æ·±åº¦ç¼“å†²åŒºå†™å…¥
+		glColorMask(GL_FALSE, GL_FALSE, GL_FALSE,GL_FALSE);
+		glDepthMask(GL_FALSE);
+		//æ‰“å¼€æ¨¡æ¿ç¼“å†²åŒºå†™å…¥
+		glStencilMask(0xff);
+		//æ¨¡æ¿æµ‹è¯•æ°¸è¿œé€šè¿‡
+		glStencilFunc(GL_ALWAYS, 1, 0xff);//å‚è€ƒå€¼æ˜¯1
+		//è®¾ç½®æµ‹è¯•çš„ç»“æœå¤„ç†
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);//æ¨¡æ¿æµ‹è¯•å’Œæ·±åº¦æµ‹è¯•é€šè¿‡åï¼Œä½¿ç”¨å‚è€ƒå€¼ä»£æ›¿æ¨¡æ¿ç¼“å†²åŒºé‡Œçš„æ¨¡æ¿å€¼ã€‚
+		//ç»˜åˆ¶æ¨¡æ¿(æ‹¿ä»–å¡«å……æ¨¡æ¿ç¼“å†²æ•°æ®ï¼‰
+		glBindVertexArray(stencilVAO);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		/************************ç»˜åˆ¶é®ç½©åé¢çš„åœºæ™¯*********************************/
+		//å¼€å¯é¢œè‰²ç¼“å†²åŒºå†™å…¥ã€æ·±åº¦ç¼“å†²åŒºå†™å…¥
+		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+		glDepthMask(GL_TRUE);
+		//å…³é—­æ¨¡æ¿ç¼“å†²å†™å…¥
+		glStencilMask(0x00);
+		//è®¾ç½®æ¨¡æ¿æµ‹è¯•è§„åˆ™
+		glStencilFunc(GL_EQUAL, 1, 0xff);//æ¨¡æ¿å€¼ä¸º1çš„ç‰‡æ®µé€šè¿‡æµ‹è¯•
+		glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);//ä¸æ›´æ–°æ¨¡æ¿ç¼“å†²æ•°æ®
+
+		//ç»˜åˆ¶2ä¸ªç«‹æ–¹ä½“
 		shader.use();
-		glm::mat4 model;
-		//draw floor
-		model = glm::mat4();
-		model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+		glUniform1i(glGetUniformLocation(shader.programId, "texture1"), 0);
+		glm::mat4 model = glm::mat4();
+		model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
 		glm::mat4 view = camera.getViewMatrix();
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 0.1f, 100.0f);
 		glUniformMatrix4fv(glGetUniformLocation(shader.programId, "model"), 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(glGetUniformLocation(shader.programId, "view"), 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(glGetUniformLocation(shader.programId, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		
-		glBindTexture(GL_TEXTURE_2D, floorTexture);
-		glBindVertexArray(planeVAO);
-		glUniformMatrix4fv(glGetUniformLocation(shader.programId, "model"), 1, GL_FALSE, glm::value_ptr(model));
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-
-		//cubes
-		model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
-		
+		glUniform1i(glGetUniformLocation(shader.programId,"texture1"), 0);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, cubeTexture);
 		glBindVertexArray(cubeVAO);
-
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
-		
+		model = glm::mat4();
+		model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(glGetUniformLocation(shader.programId, "model"), 1, GL_FALSE, glm::value_ptr(model));
+		glBindVertexArray(cubeVAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		//ç»˜åˆ¶åœ°é¢
+		model = glm::mat4();
+		glUniformMatrix4fv(glGetUniformLocation(shader.programId, "model"), 1, GL_FALSE, glm::value_ptr(model));
+		glBindTexture(GL_TEXTURE_2D, floorTexture);
+		glBindVertexArray(planeVAO);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 
 
 		glBindVertexArray(0);
-		glfwSwapBuffers(window); // ½»»»»º´æ
+		glfwSwapBuffers(window); // äº¤æ¢ç¼“å­˜
 	}
 
 	glDeleteVertexArrays(1, &cubeVAO);
@@ -290,7 +334,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 	camera.ProcessMouseScroll(yoffset);
 
 }
-//×ÛºÏ´¦Àí¼üÅÌ°´¼ü£¬½â¾ö¿¨¶Ù
+//ç»¼åˆå¤„ç†é”®ç›˜æŒ‰é”®ï¼Œè§£å†³å¡é¡¿
 void Do_Movement()
 {
 	if (keys[GLFW_KEY_W])
@@ -322,7 +366,7 @@ GLuint loadTexture(const char* path)
 	{
 		GLenum format;
 		if (channel == 1)
-			format = GL_RED;//µ¥Í¨µÀ
+			format = GL_RED;//å•é€šé“
 		else if (channel == 3)
 			format = GL_RGB;
 		else if (channel == 4)
