@@ -216,7 +216,6 @@ int main(int argc, char** argv)
 	Shader shaderSingleColor("stencil_test.vs", "stencil_test_singleline.fs");
 	Shader stencilShader("stencil.vs", "stencil.fs");
 
-	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_STENCIL_TEST);
 	// 开始游戏主循环
 	while (!glfwWindowShouldClose(window))
@@ -228,38 +227,29 @@ int main(int argc, char** argv)
 		glfwPollEvents(); // 处理例如鼠标 键盘等事件
 		Do_Movement();
 		stencilShader.use();
-		///*********************写入模板缓冲*****************************/
-		//// 清除颜色缓冲区、深度缓冲区、模板缓冲区
+
+		// 清除颜色缓冲区、深度缓冲区、模板缓冲区
+		glEnable(GL_DEPTH_TEST);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-		//关闭颜色缓冲区(因为不显示作为模板的矩形)、深度缓冲区写入
-		glColorMask(GL_FALSE, GL_FALSE, GL_FALSE,GL_FALSE);
-		glDepthMask(GL_FALSE);
-		//打开模板缓冲区写入
-		glStencilMask(0xff);
-		//模板测试永远通过
-		glStencilFunc(GL_ALWAYS, 1, 0xff);//参考值是1
-		//设置测试的结果处理
-		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);//模板测试和深度测试通过后，使用参考值代替模板缓冲区里的模板值。
-		//绘制模板(拿他填充模板缓冲数据）
-		glBindVertexArray(stencilVAO);
+		/***************************先绘制地面**************************/
+		//关闭模板缓冲区写入
+		glStencilMask(0x00);
+		shader.use();
+		glm::mat4 model = glm::mat4();
+		glUniformMatrix4fv(glGetUniformLocation(shader.programId, "model"), 1, GL_FALSE, glm::value_ptr(model));
+		glBindTexture(GL_TEXTURE_2D, floorTexture);
+		glBindVertexArray(planeVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
-		/************************绘制遮罩后面的场景*********************************/
-		//开启颜色缓冲区写入、深度缓冲区写入
-		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-		glDepthMask(GL_TRUE);
-		//关闭模板缓冲写入
-		glStencilMask(0x00);
-		//设置模板测试规则
-		glStencilFunc(GL_EQUAL, 1, 0xff);//模板值为1的片段通过测试
-		glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);//不更新模板缓冲数据
-
+		/******************绘制2个立方体，更新模板缓冲区********************/
+		glStencilMask(0xff);//开启模板缓冲写入
+		glStencilFunc(GL_ALWAYS,1,0xff);
 		//绘制2个立方体
-		shader.use();
 		glUniform1i(glGetUniformLocation(shader.programId, "texture1"), 0);
-		glm::mat4 model = glm::mat4();
+		model = glm::mat4();
 		model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
 		glm::mat4 view = camera.getViewMatrix();
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 0.1f, 100.0f);
@@ -278,13 +268,31 @@ int main(int argc, char** argv)
 		glBindVertexArray(cubeVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
-		//绘制地面
-		model = glm::mat4();
-		glUniformMatrix4fv(glGetUniformLocation(shader.programId, "model"), 1, GL_FALSE, glm::value_ptr(model));
-		glBindTexture(GL_TEXTURE_2D, floorTexture);
-		glBindVertexArray(planeVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+	    /**************关闭模板缓冲区写入，使用纯色shader绘制2个稍大一点的箱子***********/
+		glStencilMask(0x00);//关闭模板缓冲写入
+		glStencilFunc(GL_NOTEQUAL,1,0xff);//设置测试方式
+		glDisable(GL_DEPTH_TEST);//关闭深度测试
 
+		//绘制2个立方体
+		shaderSingleColor.use();
+		model = glm::mat4();
+		model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
+		model = glm::scale(model, glm::vec3(1.05, 1.05, 1.05));
+		glUniformMatrix4fv(glGetUniformLocation(shaderSingleColor.programId, "model"), 1, GL_FALSE, glm::value_ptr(model));
+		glUniformMatrix4fv(glGetUniformLocation(shaderSingleColor.programId, "view"), 1, GL_FALSE, glm::value_ptr(view));
+		glUniformMatrix4fv(glGetUniformLocation(shaderSingleColor.programId, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+		glBindVertexArray(cubeVAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		model = glm::mat4();
+		model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.05, 1.05, 1.05));
+		glUniformMatrix4fv(glGetUniformLocation(shaderSingleColor.programId, "model"), 1, GL_FALSE, glm::value_ptr(model));
+		glBindVertexArray(cubeVAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		glStencilMask(0xFF);
+		glEnable(GL_DEPTH_TEST);
 
 		glBindVertexArray(0);
 		glfwSwapBuffers(window); // 交换缓存
