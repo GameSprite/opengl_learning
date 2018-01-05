@@ -48,5 +48,8 @@
     <Image Include="texture\grass.png">
       <Filter>资源文件\texture</Filter>
     </Image>
+    <Image Include="texture\transparent_window.png">
+      <Filter>资源文件\texture</Filter>
+    </Image>
   </ItemGroup>
 </Project>

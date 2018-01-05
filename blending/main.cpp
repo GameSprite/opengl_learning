@@ -12,6 +12,7 @@
 #include <glm\gtc\type_ptr.hpp>
 #include <iostream>
 #include <vector>
+#include <map>
 
 // 包含着色器加载库
 #include "shader.h"
@@ -48,7 +49,7 @@ int main(int argc, char** argv)
 		std::cout << "Error::GLFW could not initialize GLFW!" << std::endl;
 		return -1;
 	}
-
+	
 	// 开启OpenGL 3.3 core profile
 	std::cout << "Start OpenGL core profile version 3.3" << std::endl;
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -160,7 +161,7 @@ int main(int argc, char** argv)
 		1.0f, -0.5f, 0.0f, 1.0f, 1.0f,
 		1.0f, 0.5f, 0.0f, 1.0f, 0.0f
 	};
-	//vegetation
+	//windows
 	std::vector<glm::vec3> vegetation;
 	vegetation.push_back(glm::vec3(-1.5f, 0.0f, -0.48f));
 	vegetation.push_back(glm::vec3(1.5f, 0.0f, 0.51f));
@@ -168,6 +169,13 @@ int main(int argc, char** argv)
 	vegetation.push_back(glm::vec3(-0.3f, 0.0f, -2.3f));
 	vegetation.push_back(glm::vec3(0.5f, 0.0f, -0.6f));
 
+	//对窗子根据与摄像机的距离进行排序
+	std::map<GLfloat, glm::vec3> sorted;
+	for (auto& v : vegetation)
+	{
+		GLfloat distance = glm::length(camera.Position - v);
+		sorted[distance] = v;
+	}
 	//cube VAO
 	GLuint cubeVAO, cubeVBO, planeVAO,planeVBO,vegetationVAO,vegetationVBO;
 	glGenVertexArrays(1, &cubeVAO);
@@ -205,12 +213,14 @@ int main(int argc, char** argv)
 	//load texture
 	GLuint cubeTexture = loadTexture("texture/marble.jpg");
 	GLuint floorTexture = loadTexture("texture/metal.png");
-	GLuint vegetationTexture = loadTexture("texture/grass.png");
+	GLuint windowTexture = loadTexture("texture/transparent_window.png");
 
 	//shader
 	Shader shader("blending.vs", "blending.fs");
 
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	// 开始游戏主循环
 	while (!glfwWindowShouldClose(window))
 	{
@@ -254,15 +264,16 @@ int main(int argc, char** argv)
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
 		//绘制植被
-		glBindTexture(GL_TEXTURE_2D, vegetationTexture);
+		glBindTexture(GL_TEXTURE_2D, windowTexture);
 		glBindVertexArray(vegetationVAO);
-		for (size_t i = 0; i < vegetation.size(); i++){
+
+		for (std::map<GLfloat, glm::vec3>::reverse_iterator it = sorted.rbegin(); it != sorted.rend(); it++)
+		{
 			model = glm::mat4();
-			model = glm::translate(model, vegetation[i]);
+			model = glm::translate(model, it->second);
 			glUniformMatrix4fv(glGetUniformLocation(shader.programId, "model"), 1, GL_FALSE, glm::value_ptr(model));
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 		}
-
 		glBindVertexArray(0);
 		glfwSwapBuffers(window); // 交换缓存
 	}

@@ -83,6 +83,7 @@
     <Image Include="texture\grass.png" />
     <Image Include="texture\marble.jpg" />
     <Image Include="texture\metal.png" />
+    <Image Include="texture\transparent_window.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
