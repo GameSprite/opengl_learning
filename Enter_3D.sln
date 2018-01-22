@@ -19,6 +19,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Stencil_test", "Stencil_tes
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "blending", "blending\blending.vcxproj", "{D5B20251-7D23-4351-924C-7EC052CA7BDD}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "framebuffer", "framebuffer\framebuffer.vcxproj", "{1E82976A-437E-47DC-A3B1-E8A3A7FA1969}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -57,6 +59,10 @@ Global
 		{D5B20251-7D23-4351-924C-7EC052CA7BDD}.Debug|Win32.Build.0 = Debug|Win32
 		{D5B20251-7D23-4351-924C-7EC052CA7BDD}.Release|Win32.ActiveCfg = Release|Win32
 		{D5B20251-7D23-4351-924C-7EC052CA7BDD}.Release|Win32.Build.0 = Release|Win32
+		{1E82976A-437E-47DC-A3B1-E8A3A7FA1969}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1E82976A-437E-47DC-A3B1-E8A3A7FA1969}.Debug|Win32.Build.0 = Debug|Win32
+		{1E82976A-437E-47DC-A3B1-E8A3A7FA1969}.Release|Win32.ActiveCfg = Release|Win32
+		{1E82976A-437E-47DC-A3B1-E8A3A7FA1969}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
