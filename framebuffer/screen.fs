@@ -4,5 +4,7 @@ uniform sampler2D texture1;
 out vec4 color;
 void main()
 {
-    color = vec4(vec3(1.0 - texture(texture1,texCoords)),1.0);
+    color = texture(texture1,texCoords);
+    float average = (color.r + color.g + color.b) / 3.0;
+    color = vec4(average,average,average,1.0);
 }

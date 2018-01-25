@@ -216,7 +216,7 @@ int main(int argc, char** argv)
 	glBindVertexArray(0);
 
 	//load texture
-	GLuint cubeTexture = loadTexture("texture/marble.jpg");
+	GLuint cubeTexture = loadTexture("texture/container.jpg");
 	GLuint floorTexture = loadTexture("texture/metal.png");
 
 	//FrameBuffer
