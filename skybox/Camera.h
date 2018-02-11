@@ -51,7 +51,7 @@ public:
 	}
 
 	glm::mat4 getPerspectiveMatrix(float screenWidth, float screenHeight){
-		return glm::perspective(this->Zoom, screenWidth / screenHeight, 1.0f, 100.0f);
+		return glm::perspective(this->Zoom, screenWidth / screenHeight, 0.1f, 100.0f);
 	}
 
 	void processMouseMovement(GLfloat xoffset, GLfloat yoffset, bool constrainPitch = true){

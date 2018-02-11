@@ -21,6 +21,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "blending", "blending\blendi
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FrameBuffer", "FrameBuffer\FrameBuffer.vcxproj", "{17329BE7-DAEC-4393-80EC-91A565612C73}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "skybox", "skybox\skybox.vcxproj", "{B0C43B98-3744-4AF5-81BB-F510E231D575}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -63,6 +65,10 @@ Global
 		{17329BE7-DAEC-4393-80EC-91A565612C73}.Debug|Win32.Build.0 = Debug|Win32
 		{17329BE7-DAEC-4393-80EC-91A565612C73}.Release|Win32.ActiveCfg = Release|Win32
 		{17329BE7-DAEC-4393-80EC-91A565612C73}.Release|Win32.Build.0 = Release|Win32
+		{B0C43B98-3744-4AF5-81BB-F510E231D575}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B0C43B98-3744-4AF5-81BB-F510E231D575}.Debug|Win32.Build.0 = Debug|Win32
+		{B0C43B98-3744-4AF5-81BB-F510E231D575}.Release|Win32.ActiveCfg = Release|Win32
+		{B0C43B98-3744-4AF5-81BB-F510E231D575}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
