@@ -119,48 +119,48 @@ int main(int argc, char** argv)
 	SOIL_free_image_data(image);
 	/***********************立方体顶点数据***********************/
 	GLfloat cubeVertices[] = {
-		// Positions          // Texture Coords
-		-0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
-		0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
-		0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-		0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+		// Positions          // Normals
+		-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+		0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+		0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+		0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+		-0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+		-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
 
-		-0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-		0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
-		0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
-		0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
-		-0.5f, 0.5f, 0.5f, 0.0f, 1.0f,
-		-0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+		-0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+		0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+		0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+		0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+		-0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
 
-		-0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-		-0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-		-0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-		-0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+		-0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f,
+		-0.5f, 0.5f, -0.5f, -1.0f, 0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f,
+		-0.5f, -0.5f, 0.5f, -1.0f, 0.0f, 0.0f,
+		-0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f,
 
-		0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-		0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-		0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-		0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-		0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-		0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+		0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
+		0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
+		0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
+		0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
+		0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
+		0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
 
-		-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-		0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
-		0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
-		0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
-		-0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-		-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f,
+		0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f,
+		0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f,
+		0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f,
+		-0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f,
 
-		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
-		0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-		0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-		0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-		-0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
-		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f
+		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+		0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+		0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f,
+		0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f,
+		-0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f,
+		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f
 	};
 	float skyboxVertices[] = {
 		// positions          
@@ -217,9 +217,9 @@ int main(int argc, char** argv)
 	glBindBuffer(GL_ARRAY_BUFFER, boxVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)0);
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat),(void*)(3 * sizeof(GLfloat)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat),(void*)(3 * sizeof(GLfloat)));
 	glBindVertexArray(0);
 
 	glBindVertexArray(skyVAO);
@@ -252,8 +252,9 @@ int main(int argc, char** argv)
 		glUniformMatrix4fv(glGetUniformLocation(sceneShader.programId, "view"), 1, GL_FALSE, glm::value_ptr(camera.getViewMatrix()));
 		glUniformMatrix4fv(glGetUniformLocation(sceneShader.programId, "projection"), 1, GL_FALSE, glm::value_ptr(camera.getPerspectiveMatrix(WINDOW_WIDTH, WINDOW_HEIGHT)));
 		glUniform1i(glGetUniformLocation(sceneShader.programId, "tex0"), 0);
+		glUniform3fv(glGetUniformLocation(sceneShader.programId, "cameraPos"), 1, glm::value_ptr(camera.Position));
 		glBindVertexArray(boxVAO);
-		glBindTexture(GL_TEXTURE_2D, boxTexture);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTexture);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
 #pragma endregion 绘制场景(1个箱子)

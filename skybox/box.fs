@@ -1,8 +1,14 @@
 #version 330 core
-in vec2 Texcoords;
+in vec3 Normal;
+in vec3 Position;
+
 out vec4 color;
-uniform sampler2D tex0;
+
+uniform samplerCube tex0;
+uniform vec3 cameraPos;
 void main()
 {
-    color = texture(tex0,Texcoords);
+    vec3 viewDir = normalize(Position - cameraPos);
+    vec3 reflectDir = reflect(viewDir,normalize(Normal));
+    color = texture(tex0,reflectDir);
 }
